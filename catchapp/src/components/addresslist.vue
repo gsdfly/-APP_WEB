@@ -5,7 +5,7 @@
      <h3>选择收货地址<span @click="goManage">管理</span></h3>
    </div>
     <ul class="addressUl">
-      <li v-for="item in list">
+      <li v-for="item in list" @click="changeAddress(item)">
         <h4><span>{{item.name}}</span><i>{{item.phone}}</i></h4>
         <dl class="address">
           <dt><i v-if="item.default == 1">默认地址：</i><i class="iconfont icon-icon-yxj-address" v-else></i></dt>
@@ -45,6 +45,9 @@
     methods: {
       goManage(){
         this.$router.push('addresslistmanage');
+      },
+      changeAddress(item){
+        this.$router.push({path:'exchangedolls',query:item})
       }
     }
   }
@@ -94,6 +97,9 @@
     border: 1px solid rgba(193,193,193,0.92);
     border-top: none;
     overflow: hidden;
+  }
+  .addressUl li:hover{
+    background: #c1c1c1;
   }
   .addressUl li:first-child{
     padding: 0.44rem 0.52rem;

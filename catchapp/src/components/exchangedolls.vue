@@ -1,6 +1,18 @@
 <template>
   <div class="exchangedolls" v-show="htmlShow">
-    <div class="header">
+    <div class="header header2">
+      <back></back>
+      <h3>确认订单</h3>
+      <div class="defaultAddress">
+        <h4><span>{{defaultAddress.name}}</span><i>{{defaultAddress.phone}}</i></h4>
+        <dl class="address">
+          <dt><i class="iconfont icon-icon-yxj-address"></i></dt>
+          <dd>{{''+defaultAddress.province+defaultAddress.city+defaultAddress.area+defaultAddress.address}}</dd>
+        </dl>
+        <a @click="goAddressList" href="javascript:void(0)">其他地址<i class="iconfont icon-go1"></i></a>
+      </div>
+    </div>
+    <div class="header2">
       <back></back>
       <h3>确认订单</h3>
       <div class="defaultAddress">
@@ -40,20 +52,27 @@
       this.Indicator.open();
     },
     mounted(){
-//      this.dolls =this.$route.query;
       this.dolls = JSON.parse(localStorage.getItem('dolls'));
-      getAddressDefault().then((data) => {
-        if(data.response.list){
-          this.defaultAddress = data.response.list;
-          this.htmlShow = true;
-        }else {
+      if(this.$route.query.name){
+        this.defaultAddress = this.$route.query;
+        this.htmlShow = true;
+        setTimeout(()=>{
+          this.Indicator.close();
+        },100);
+      }else {
+        getAddressDefault().then((data) => {
+          if(data.response.list){
+            this.defaultAddress = data.response.list;
+            this.htmlShow = true;
+          }else {
 //          直接去添加地址页面
-          MessageBox.alert('您还没有收货地址，前先添加收货地址').then(() => {
-            this.$router.push({path:'addressedit',query:{local:'exchangedolls'}});
-          });
-        }
-        this.Indicator.close();
-      })
+            MessageBox.alert('您还没有收货地址，前先添加收货地址').then(() => {
+              this.$router.push({path:'addressedit',query:{local:'exchangedolls'}});
+            });
+          }
+          this.Indicator.close();
+        })
+      }
     },
     methods:{
       confirmExchange(){
@@ -95,7 +114,7 @@
     z-index: 666;
     padding: 0 0.32rem;
   }
-  .exchangedolls .header h3{
+.exchangedolls .header2 h3{
     font-size: 0.64rem;
     font-weight: 600;
     line-height: 0.64rem;
@@ -150,7 +169,8 @@
   }
   .dolls{
     width: 100%;
-    margin: 7.2rem 0 1.85rem 0;
+    /*margin: 6.99rem 0 1.85rem 0;*/
+    margin: 0 0 1.85rem 0;
     overflow: hidden;
   }
   .dolls li{
