@@ -1,7 +1,6 @@
 <template>
   <div class="ableexchangedolls" v-show="htmlShow">
     <div class="header">
-      <back></back>
       <h3>选择要寄送的娃娃</h3>
     </div>
     <ul class="main">
@@ -21,7 +20,6 @@
 
 <script>
   import { Checkbox } from 'vant';
-  import back from './back.vue'
   import { MessageBox } from 'mint-ui';
   import {getDollList,getDollOrderList,getDollOrder,exchangeDolls} from './../util/ajax'
   export default {
@@ -61,9 +59,6 @@
 //        this.$router.push({path:'exchangedolls',query:this.dolls});
         this.$router.push('exchangedolls');
       },
-    },
-    components:{
-      back
     }
   }
 </script>
@@ -99,7 +94,7 @@
 
   .ableexchangedolls .main{
     width: 100%;
-    margin: 2.92rem 0 1.85rem 0;
+    margin: 1.77rem 0 1.85rem 0;
     overflow: hidden;
   }
   .ableexchangedolls .main li{

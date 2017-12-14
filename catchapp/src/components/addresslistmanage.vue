@@ -1,7 +1,6 @@
 <template>
   <div class="addressListManage" v-show="htmlShow">
     <div class="header">
-      <back></back>
       <h3>管理收货地址</h3>
     </div>
     <ul class="addressUl">
@@ -28,7 +27,6 @@
 <script>
   import {AddressList, Toast} from 'vant';
   import {MessageBox} from 'mint-ui';
-  import back from './back.vue'
   import {instance} from './../config/common.js'
   import {getAddressList, deleteAddress, setAddressDefault} from './../util/ajax'
 
@@ -39,9 +37,6 @@
         chosenAddressId: '1',
         list: []
       }
-    },
-    components: {
-      back
     },
     created() {
       this.Indicator.open();
@@ -126,7 +121,7 @@
     width: 100%;
     font-size: 0.48rem;
     color: #494949;
-    margin: 3.04rem 0 1.85rem 0;
+    margin: 1.89rem 0 1.85rem 0;
   }
 
   .addressUl li {

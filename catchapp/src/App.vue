@@ -26,21 +26,21 @@
   /*}*/
   @import url(//at.alicdn.com/t/font_385880_z82suy0lsfumzpvi.css);
 
-  @font-face
-  {
-    font-family: S-Medium;
-    src: url('./assets/fonts/SourceHanSansCN-Bold.otf')
-  }
-  @font-face
-  {
-    font-family: S-Medium;
-    src: url('./assets/fonts/SourceHanSansCN-Medium.otf')
-  }
-  @font-face
-  {
-    font-family: S-Regular;
-    src: url('./assets/fonts/SourceHanSansCN-Regular.otf')
-  }
+  /*@font-face*/
+  /*{*/
+    /*font-family: S-Bold;*/
+    /*src: url('./assets/fonts/SourceHanSansCN-Bold.ttf');*/
+  /*}*/
+  /*@font-face*/
+  /*{*/
+    /*font-family: S-Medium;*/
+    /*src: url('./assets/fonts/SourceHanSansCN-Medium.ttf');*/
+  /*}*/
+  /*@font-face*/
+  /*{*/
+    /*font-family: S-Regular;*/
+    /*src: url('./assets/fonts/SourceHanSansCN-Regular.ttf');*/
+  /*}*/
   html,body ,#app{
     width: 100%;
     height: 100%;
@@ -63,19 +63,20 @@
   }
 
   body {
-    font-family: S-Medium;
+    /*font-family: S-Medium;*/
+    font-family: "Adobe 黑体 Std R";
     /*-webkit-font-smoothing: antialiased;*/
     /*-moz-osx-font-smoothing: grayscale;*/
     /*text-align: center;*/
     /*color: #000;*/
     /*font-size: 0.22rem;*/
   }
-  body .header h3{
-    font-family: S-Bold;
-  }
-  body .header h3 span{
-    font-family: S-Medium;
-  }
+  /*body .header h3{*/
+    /*font-family: S-Bold;*/
+  /*}*/
+  /*body .header h3 span{*/
+    /*font-family: S-Medium;*/
+  /*}*/
 
 
 </style>

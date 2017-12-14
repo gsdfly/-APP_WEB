@@ -1,12 +1,11 @@
 <template>
   <div class="addressEdit">
-    <back></back>
     <h3><span v-if="isShow">修改地址</span><span v-else>新建地址</span></h3>
     <div class="section">
-      <input type="text" name="name" class="name" placeholder="收件人姓名" v-model="addressInfo.name"/>
+      <input type="text" name="name" class="name" placeholder="收件人姓名" v-model.trim="addressInfo.name"/>
     </div>
     <div class="section">
-      <input type="tel" name="phone" class="phone" placeholder="手机或固定电话" v-model="addressInfo.phone"/>
+      <input type="tel" name="phone" class="phone" placeholder="手机或固定电话" v-model.trim="addressInfo.phone"/>
     </div>
     <div class="section" @click="isPopup = !isPopup">
       <span>{{addressInfo.province}}</span>
@@ -14,10 +13,10 @@
       <span>{{addressInfo.area}}</span>
   </div>
   <div class="section">
-    <input type="text" name="address" class="address" placeholder="详细地址（街道、门牌号等）" v-model="addressInfo.address"/>
+    <input type="text" name="address" class="address" placeholder="详细地址（街道、门牌号等）" v-model.trim="addressInfo.address"/>
   </div>
   <div class="default" v-show="!defaultInit">
-    <i @click="changeDefault($event)"></i><span>设为默认地址</span>
+    <i @click="changeDefault($event)" :class="{'iconfont icon-check':addressInfo.default==1}"></i><span>设为默认地址</span>
   </div>
     <div class="footer">
       <button class="btn" @click="createAdd">保存</button>
@@ -28,14 +27,12 @@
         <van-area :areaList="areaList" @confirm="confirm" @cancel="cancel"/>
       </div>
     </transition>
-
   </div>
 </template>
 
 <script>
   import { Area } from 'vant';
   import { MessageBox } from 'mint-ui';
-  import back from './back.vue'
   import AREALIST from './../arealist';
   import {instance} from './../config/common'
   import {createAddress,updateAddress,deleteAddress,getAddressDefault} from './../util/ajax'
@@ -60,9 +57,6 @@
         }
       }
     },
-    components:{
-      back
-    },
     mounted(){
       if(this.$route.query.name){
         this.addressInfo = this.$route.query;
@@ -70,13 +64,14 @@
         if(this.addressInfo.default ==1){
           this.defaultInit = true;
         }
-      }else {
-        getAddressDefault().then((data) => {
-          if(!data.response.list){
-            this.defaultInit = true;
-          }
-        })
       }
+      getAddressDefault().then((data) => {
+        try{
+          data.response.list
+        }catch(err){
+          this.defaultInit = true;
+        }
+      })
     },
     methods: {
       changeDefault(event){
@@ -175,7 +170,7 @@
   .addressEdit{
     width: 100%;
     height: 100%;
-    padding: 0 0.32rem;
+    padding: 0.1px 0.32rem 0 0.32rem;
     font-size: 0.48rem;
     color: #666;
     font-family: S-Regular;
@@ -195,8 +190,9 @@
   }
   .section input{
     width: 100%;
-    height: 1rem;
+    height: 100%;
     border: none;
+    box-sizing: border-box;
   }
 
   .footer{

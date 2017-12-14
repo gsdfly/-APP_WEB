@@ -1,7 +1,6 @@
 <template>
   <div class="addressList" v-show="htmlShow">
    <div class="header">
-     <back></back>
      <h3>选择收货地址<span @click="goManage">管理</span></h3>
    </div>
     <ul class="addressUl">
@@ -18,7 +17,6 @@
 
 <script>
   import {Toast, AddressList } from 'vant';
-  import back from './back.vue'
   import {instance} from './../config/common.js'
   import {getAddressList,deleteAddress,setAddressDefault} from './../util/ajax'
   export default {
@@ -38,9 +36,6 @@
         this.Indicator.close();
         this.htmlShow = true;
       })
-    },
-    components:{
-      back
     },
     methods: {
       goManage(){
@@ -87,7 +82,7 @@
     width: 100%;
     font-size: 0.48rem;
     color: #494949;
-    margin: 2.99rem 0 0 0;
+    margin: 1.84rem 0 0 0;
     font-family: S-Regular;
   }
 

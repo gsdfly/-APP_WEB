@@ -1,7 +1,6 @@
 <template>
   <div class="dolllist" v-show="htmlShow">
    <div class="header">
-     <back></back>
      <h3>我的娃娃<span @click="sendDoll">寄送娃娃<i class="iconfont icon-go"></i></span></h3>
      <ul class="datalist">
        <li>
@@ -32,7 +31,6 @@
 
 <script>
   import {getDollList} from './../util/ajax'
-  import back from './back.vue'
   export default {
       data(){
         return {
@@ -55,16 +53,17 @@
           }
           this.Indicator.close();
           this.htmlShow = true;
+        }).catch((err) => {
+          alert('错误'+err);
+          alert(CONFIG.token);
         })
       },
       methods:{
         sendDoll(){
           this.$router.push('ableexchangedolls');
         }
-      },
-      components:{
-          back
       }
+
   }
 </script>
 
@@ -129,7 +128,7 @@
   .dolllist .main{
     width: 100%;
     /*height: calc(100% - 4.49rem);*/
-    margin: 5.46rem 0 0 0;
+    margin:4.31rem 0 0 0;
   }
   .dolllist .main li{
     width: calc((100% - 0.32rem)/2);

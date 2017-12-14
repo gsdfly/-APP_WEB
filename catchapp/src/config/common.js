@@ -10,7 +10,6 @@ let instance = axios.create({
 instance.interceptors.response.use(function(response) {
   // 错误码信息
   let res = response.data
-
   if (res.status_code != 200) {
     // MessageBox('提示','网络出错,请稍后重试')
   }

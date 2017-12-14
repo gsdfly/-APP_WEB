@@ -1,7 +1,6 @@
 <template>
   <div class="exchangedolls" v-show="htmlShow">
     <div class="header header2">
-      <back></back>
       <h3>确认订单</h3>
       <div class="defaultAddress">
         <h4><span>{{defaultAddress.name}}</span><i>{{defaultAddress.phone}}</i></h4>
@@ -37,7 +36,6 @@
 </template>
 
 <script>
-  import back from './back.vue'
   import { MessageBox } from 'mint-ui';
   import {getAddressDefault,exchangeDolls} from './../util/ajax'
   export default {
@@ -89,9 +87,6 @@
         this.$router.push('addresslist');
       }
     },
-    components:{
-      back
-    }
   }
 </script>
 

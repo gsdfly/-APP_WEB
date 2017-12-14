@@ -1,7 +1,6 @@
 <template>
   <div class="orders" v-show="htmlShow">
     <div class="header">
-      <back></back>
       <h3>订单列表</h3>
     </div>
     <ul class="orderUl">
@@ -29,7 +28,6 @@
 </template>
 
 <script>
-  import back from './back.vue'
   import {getDollOrderList,getDollOrder} from './../util/ajax'
   export default {
     data(){
@@ -38,17 +36,16 @@
         orderList:[]
       }
     },
-    components:{
-      back
-    },
     created(){
       this.Indicator.open();
     },
     mounted(){
-      getDollOrderList().then((data) => {
-        this.orderList = data.response.list;
-        this.Indicator.close();
-        this.htmlShow = true;
+      this.$nextTick(()=>{
+        getDollOrderList().then((data) => {
+          this.orderList = data.response.list;
+          this.Indicator.close();
+          this.htmlShow = true;
+        })
       })
     },
     methods:{
@@ -85,7 +82,7 @@
   .orders .orderUl{
     width: 100%;
     overflow: hidden;
-    margin: 2.87rem 0 0 0;
+    margin: 1.72rem 0 0 0;
   }
   .orders .orderUl li{
     width: 100%;

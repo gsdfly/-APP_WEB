@@ -7,6 +7,7 @@ import 'vant/lib/vant-css/index.css';
 import router from './router'
 import 'mint-ui/lib/style.css'
 import Indicator from 'mint-ui/lib/indicator'
+import FastClick from 'fastclick'
 import {callAppFunction} from './util/util.js'
 import CONFIG from './config/index'
 
@@ -24,6 +25,8 @@ import CONFIG from './config/index'
   doc.addEventListener('DOMContentLoaded', recalc, false)
 }(document, window)
 
+FastClick.attach(document.body);
+
 Vue.use(Vant);
 
 Vue.config.productionTip = false
@@ -32,9 +35,13 @@ Vue.config.productionTip = false
   Vue.prototype.Indicator = Indicator
   Vue.prototype.callAppFunction=callAppFunction
 
-  // callAppFunction('getUserInfo','',function (res) {
-  //   CONFIG.token = res.catch_token;
-  // });
+  callAppFunction('getUserInfo','',function (res) {
+    if(typeof res == 'string'){
+      res = JSON.parse(res);
+    }
+    CONFIG.token = res.catch_token;
+  });
+
   new Vue({
     el: '#app',
     template: '<App/>',
