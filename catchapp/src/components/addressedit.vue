@@ -57,6 +57,9 @@
         }
       }
     },
+    created(){
+      this.Indicator.open();
+    },
     mounted(){
       if(this.$route.query.name){
         this.addressInfo = this.$route.query;
@@ -66,11 +69,10 @@
         }
       }
       getAddressDefault().then((data) => {
-        try{
-          data.response.list
-        }catch(err){
-          this.defaultInit = true;
-        }
+          if(data.response.length == 0){
+            this.defaultInit = true;
+          }
+        this.Indicator.close();
       })
     },
     methods: {
@@ -126,7 +128,7 @@
         if(this.isShow){
           updateAddress(this.addressInfo).then((data) => {
             MessageBox.alert('修改成功').then(() => {
-              this.$router.push('addresslist');
+              this.$router.push('addresslistmanage');
             });
           })
         }else {
@@ -135,7 +137,7 @@
               if(this.$route.query.local){
                 this.$router.push('exchangedolls');
               }else{
-                this.$router.push('addresslist');
+                this.$router.push('addresslistmanage');
               }
             });
           })

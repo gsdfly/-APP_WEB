@@ -12,7 +12,6 @@
       </div>
     </div>
     <div class="header2">
-      <back></back>
       <h3>确认订单</h3>
       <div class="defaultAddress">
         <h4><span>{{defaultAddress.name}}</span><i>{{defaultAddress.phone}}</i></h4>
@@ -59,12 +58,12 @@
         },100);
       }else {
         getAddressDefault().then((data) => {
-          if(data.response.list){
-            this.defaultAddress = data.response.list;
+          if(data.response.length != 0){
+            this.defaultAddress = data.response;
             this.htmlShow = true;
           }else {
 //          直接去添加地址页面
-            MessageBox.alert('您还没有收货地址，前先添加收货地址').then(() => {
+            MessageBox.alert('您还没有收货地址，请先添加收货地址').then(() => {
               this.$router.push({path:'addressedit',query:{local:'exchangedolls'}});
             });
           }

@@ -54,8 +54,6 @@
           this.Indicator.close();
           this.htmlShow = true;
         }).catch((err) => {
-          alert('错误'+err);
-          alert(CONFIG.token);
         })
       },
       methods:{
