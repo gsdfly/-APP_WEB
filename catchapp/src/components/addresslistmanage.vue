@@ -1,25 +1,25 @@
 <template>
   <div class="addressListManage" v-show="htmlShow">
-    <div class="header">
-      <h3>管理收货地址</h3>
-    </div>
+    <div v-if="list.length >0">
+    <div class="btn" @click="createAdd"><i class="iconfont icon-jia"></i>新增地址</div>
     <ul class="addressUl">
-      <li v-for="item in list">
-        <h4><span>{{item.name}}</span><i>{{item.phone}}</i></h4>
-        <dl class="address">
-          <dt><i class="iconfont icon-icon-yxj-address"></i></dt>
-          <dd>{{'' + item.province + item.city + item.area + item.address}}</dd>
-        </dl>
-        <div class="bottom">
-          <i @click="setDefault(item.id,$event)" :class="{'iconfont icon-check' : item.default==1}"
-             class="first"></i><span v-if="item.default==1" class="default">默认地址</span><span v-else>设为默认地址</span>
-          <i class="iconfont icon-delete" @click="deleteAdd(item.id,$event)"></i>
+      <li v-for="(item,index) in list" @click="changeAddress(item)">
+          <h4><span>{{item.name}}</span><i>{{item.phone}}</i></h4>
+          <dl class="address">
+            <dt><span v-if="index==0" style="color:#f972c7">默认地址:</span><i class="iconfont icon-icon-yxj-address" v-else></i></dt>
+            <dd>{{'' + item.province + item.city + item.area + item.address}}</dd>
+          </dl>
+        <div class="bottom" @click.stop="">
           <i class="iconfont icon-bianji" @click="editAdd(item)"></i>
+          <i class="iconfont icon-shanchu1" @click="deleteAdd(item.id,$event)"></i>
         </div>
       </li>
     </ul>
-    <div class="footer">
-      <div class="btn" @click="createAdd">添加新地址</div>
+    </div>
+    <div class="nothing" v-else>
+      <img src="./../assets/images/image_no_adress.png" alt="">
+      <p>您还没有收货地址</p>
+      <button @click="createAdd">新建地址</button>
     </div>
   </div>
 </template>
@@ -38,40 +38,19 @@
         list: []
       }
     },
-    created() {
-      this.Indicator.open();
-    },
     mounted() {
       getAddressList().then((data) => {
-        this.list = data.response.list;
-        this.Indicator.close();
-        this.htmlShow = true;
+        try {
+          this.list = data.response.list;
+        }catch (err){}
+          this.htmlShow = true;
+          this.callAppFunction('showContent')
       })
     },
     methods: {
-      //设置默认地址
-      setDefault(id, event) {
-        if (event.target.className.indexOf('iconfont') != -1) {
-          return;
-        }
-        this.Indicator.open();
-        setAddressDefault({"id": id}).then((data) => {
-          var currentLi = document.querySelector('.icon-check');
-          if (currentLi) {
-            currentLi.className = 'first';
-            currentLi.nextElementSibling.className = '';
-            currentLi.nextElementSibling.innerHTML = '设为默认地址';
-          }
-          event.target.className = 'first iconfont icon-check';
-          event.target.nextElementSibling.className = 'default';
-          event.target.nextElementSibling.innerHTML = '默认地址';
-          this.Indicator.close();
-          Toast('设置默认地址成功');
-        })
-      },
       //删除地址
       deleteAdd(id, event) {
-        MessageBox.confirm('是否确认删除该地址').then(action => {
+        MessageBox.confirm('确定要删除该地址吗？','').then(action => {
           deleteAddress({"ids": [id]}).then((data) => {
             getAddressList().then((data) => {
               this.list = data.response.list;
@@ -85,7 +64,17 @@
       },
       //添加地址
       createAdd() {
-        this.$router.push('addressedit');
+        if(this.$route.query.form){
+          this.$router.push({path: 'addressedit', query: {'nodefault':this.list.length === 0 ? true:false,form:'exchangedolls'}});
+        }else {
+          this.$router.push({path: 'addressedit', query: {'nodefault':this.list.length === 0 ? true:false}});
+        }
+
+      },
+      changeAddress(item){
+        if(this.$route.query.form){
+          this.$router.push({path:'exchangedolls',query:item})
+        }
       }
 
     }
@@ -97,45 +86,33 @@
   .addressListManage {
     width: 100%;
     height: 100%;
-    padding: 0.1px 0.32rem 0 0.32rem;
+    padding: 0 0.36rem 0.4rem 0.36rem;
     overflow: auto;
-  }
-
-  .addressListManage .header h3 {
-    font-size: 0.64rem;
-    font-weight: 600;
-    line-height: 0.64rem;
-    margin: 0.52rem 0 0.68rem 0;
-  }
-
-  .header {
-    position: fixed;
-    width: 100%;
-    background: #fff;
-    left: 0;
-    top: 0;
-    padding: 0 0.32rem;
+    background: #fff2f2;
   }
 
   .addressUl {
     width: 100%;
     font-size: 0.48rem;
     color: #494949;
-    margin: 1.89rem 0 1.85rem 0;
   }
 
   .addressUl li {
     width: 100%;
-    padding: 0.44rem 0 0 0;
-    border: 1px solid rgba(193, 193, 193, 0.92);
+    padding: 0.44rem 0.36rem 0 0.36rem;
     overflow: hidden;
-    margin: 0.32rem 0 0 0;
-    border-radius: 5px;
+    margin: 0.06rem 0 0 0;
+    border-radius: 0.18rem;
+    background: #fff;
   }
+  .addressUl li:first-child {
+    border: 1px solid #f972c7;
+    margin: 0 0 0.37rem 0;
+  }
+
 
   .addressUl li h4 {
     line-height: 0.48rem;
-    padding: 0 0.52rem;
     margin: 0 0 0.3rem 0;
   }
 
@@ -146,10 +123,14 @@
   .addressUl li .address {
     width: 100%;
     overflow: hidden;
-    padding: 0 0.52rem;
-
+    color: #707070;
   }
-
+  .addressUl li:first-child .address dt {
+    width: 22%;
+  }
+  .addressUl li:first-child .address dd {
+  width: 78%;
+  }
   .addressUl li .address dt {
     float: left;
     width: 8%;
@@ -171,68 +152,70 @@
     height: 1.22rem;
     margin: 0.42rem 0 0 0;
     font-size: 0.42rem;
-    padding: 0.42rem 0.52rem 0.38rem 0.52rem;
-    border-top: 1px solid rgba(193, 193, 193, 0.92);
-    line-height: 0.58rem;
-    font-family: S-Regular;
+    border-top: 1px solid #dfdfdf;
+    line-height: 1.22rem;
   }
 
   .bottom i {
+    color: #666666;
+    font-size: 0.4rem;
+  }
+  .bottom i.icon-shanchu1{
     float: right;
-    color: #868686;
+    font-size: 0.5rem;
   }
-
-  .bottom i:last-of-type {
-    margin: 0 0.8rem 0 0;
-  }
-
-  .bottom i:nth-last-of-type(2) {
-    margin: 0 0.08rem 0 0;
-  }
-
-  .bottom .first {
-    width: 0.58rem;
-    height: 0.58rem;
-    float: left;
-    border: 1px solid #494949;
-    border-radius: 50%;
-    font-size: 0.58rem;
-    color: #fc9327;
-    margin: 0 0.1rem 0 0;
-  }
-
   .bottom .iconfont {
     border: none;
   }
-
-  .bottom .default {
-    color: #fc9327;
-  }
-
-  .footer {
-    width: 100%;
-    height: 1.8rem;
-    /*height: 9.4%;*/
-    background: #fff;
-    position: fixed;
-    left: 0;
-    bottom: 0;
-  }
-
   .btn {
-    width: 7.6rem;
-    height: 1.16rem;
-    border: none;
-    outline: none;
-    background: url("./../assets/images/press.png") no-repeat;
-    background-size: 100% 100%;
-    color: #fff;
-    font-size: 0.46rem;
-    font-weight: 600;
+    width: 100%;
+    height: 1.5rem;
+    color: #999999;
+    font-size: 0.44rem;
     display: block;
     text-align: center;
-    line-height: 1.16rem;
-    margin: 0.32rem auto;
+    line-height: 1.5rem;
+    background: #fff;
+    border-radius: 0.18rem;
+    margin: 0.42rem 0 0.34rem 0;
+  }
+  .btn i{
+    font-size: 0.4rem;
+    margin: 0 0.12rem 0 0;
+  }
+
+  .nothing{
+    width: 100%;
+    height: 100%;
+    position: relative;
+    top:0;
+    left: 0;
+    padding: 0.1px;
+  }
+  .nothing>img{
+    width: 4.7rem;
+    display: block;
+    margin: 30% auto 0 auto;
+  }
+  .nothing>p{
+    font-size: 0.52rem;
+    color: #999;
+    text-align: center;
+    margin: 0.6rem 0 0 0;
+  }
+  .nothing>button{
+    width: 7.14rem;
+    height: 1.38rem;
+    font-size: 0.52rem;
+    color: #fff;
+    border-radius: 0.18rem;
+    background: #f972c7;
+    border: none;
+    outline: none;
+    position: absolute;
+    bottom:25%;
+    left: 50%;
+    transform: translateX(-50%);
   }
 
 </style>

@@ -1,8 +1,9 @@
 import {instance} from './../config/common.js'
+import CONFIG from './../config/index'
 
 export const getAddressList = () => {
   return new Promise((success, error) => {
-    instance.get('address').then((data) => {
+    instance.get('address',{params:{app_key:CONFIG.appKey}}).then((data) => {
       success(data)
     }).catch((err) => {
       error(err)
@@ -12,7 +13,7 @@ export const getAddressList = () => {
 
 export const deleteAddress = (params) => {
   return new Promise((success, error) => {
-    instance.post('address/delete',params).then((data) => {
+    instance.post('address/delete',Object.assign({},{app_key:CONFIG.appKey},params)).then((data) => {
       success(data)
     }).catch((err) => {
       error(err)
@@ -22,7 +23,7 @@ export const deleteAddress = (params) => {
 
 export const setAddressDefault = (params) => {
   return new Promise((success, error) => {
-    instance.post('address/setDefault',params).then((data) => {
+    instance.post('address/setDefault',Object.assign({},{app_key:CONFIG.appKey},params)).then((data) => {
       success(data)
     }).catch((err) => {
       error(err)
@@ -32,7 +33,7 @@ export const setAddressDefault = (params) => {
 
 export const createAddress = (params) => {
   return new Promise((success, error) => {
-    instance.post('address/create',params).then((data) => {
+    instance.post('address/create',Object.assign({},{app_key:CONFIG.appKey},params)).then((data) => {
       success(data)
     }).catch((err) => {
       error(err)
@@ -42,7 +43,7 @@ export const createAddress = (params) => {
 
 export const updateAddress = (params) => {
   return new Promise((success, error) => {
-    instance.post('address/update',params).then((data) => {
+    instance.post('address/update',Object.assign({},{app_key:CONFIG.appKey},params)).then((data) => {
       success(data)
     }).catch((err) => {
       error(err)
@@ -53,7 +54,7 @@ export const updateAddress = (params) => {
 //获取默认地址
 export const getAddressDefault = () => {
   return new Promise((success, error) => {
-    instance.get('address/default').then((data) => {
+    instance.get('address/default',{params:{app_key:CONFIG.appKey}}).then((data) => {
       success(data)
     }).catch((err) => {
       error(err)
@@ -64,7 +65,7 @@ export const getAddressDefault = () => {
 //获取娃娃列表
 export const getDollList = (params) => {
   return new Promise((success, error) => {
-    instance.get('doll',{params:params}).then((data) => {
+    instance.get('doll',{params:Object.assign({},{app_key:CONFIG.appKey},params)}).then((data) => {
       success(data)
     }).catch((err) => {
       error(err)
@@ -75,7 +76,7 @@ export const getDollList = (params) => {
 //娃娃兑换订单列表
 export const getDollOrderList = () => {
   return new Promise((success, error) => {
-    instance.get('doll/exorders').then((data) => {
+    instance.get('doll/exorders',{params:{app_key:CONFIG.appKey}}).then((data) => {
       success(data)
     }).catch((err) => {
       error(err)
@@ -85,7 +86,7 @@ export const getDollOrderList = () => {
 //获取一个兑换订单详情
 export const getDollOrder = (params) => {
   return new Promise((success, error) => {
-    instance.get('doll/exorder',{params:params}).then((data) => {
+    instance.get('doll/exorder',{params:Object.assign({},{app_key:CONFIG.appKey},params)}).then((data) => {
       success(data)
     }).catch((err) => {
       error(err)
@@ -95,7 +96,7 @@ export const getDollOrder = (params) => {
 //娃娃兑换
 export const exchangeDolls = (params) => {
   return new Promise((success, error) => {
-    instance.post('doll/exorder/create',params).then((data) => {
+    instance.post('doll/exorder/create',Object.assign({},{app_key:CONFIG.appKey},params)).then((data) => {
       success(data)
     }).catch((err) => {
       error(err)
@@ -103,5 +104,27 @@ export const exchangeDolls = (params) => {
   })
 }
 
+//娃娃id获取订单
+export const dollIDGetOrder = (params) => {
+  return new Promise((success, error) => {
+    instance.post('doll/order',Object.assign({},{app_key:CONFIG.appKey},params)).then((data) => {
+      success(data)
+    }).catch((err) => {
+      error(err)
+    })
+  })
+}
+
+//获取游戏记录
+// http://yapi.5zhua.cn/mock/18/api/game/record
+export const gameHistory = (params) => {
+  return new Promise((success, error) => {
+    instance.get('game/record',{params:Object.assign({},{app_key:CONFIG.appKey},params)}).then((data) => {
+      success(data)
+    }).catch((err) => {
+      error(err)
+    })
+  })
+}
 
 

@@ -1,67 +1,109 @@
 <template>
   <div class="dolllist" v-show="htmlShow">
-   <div class="header">
-     <h3>我的娃娃<span @click="sendDoll">寄送娃娃<i class="iconfont icon-go"></i></span></h3>
-     <ul class="datalist">
-       <li>
-         <h4>{{dolllist.length}}</h4>
-         <p>总数量</p>
-       </li>
-       <li>
-         <h4>{{dolllist.length - already}}</h4>
-         <p>待寄送</p>
-       </li>
-       <li>
-         <h4>{{already}}</h4>
-         <p>已寄送</p>
-       </li>
-     </ul>
-   </div>
-    <ul class="main">
-      <li v-for="doll in dolllist" :class="{activedoll:doll.status ==1}">
-        <img :src="doll.picture" alt="">
-        <p>{{doll.name}}</p>
-        <div class="tip">
-          <p>{{doll.status ==1 ? '已寄送' : '待寄送'}}</p>
-        </div>
-      </li>
-    </ul>
+    <div v-if="this.dolllist.length > 0">
+      <ul class="main"  :style="styleUl">
+        <li v-for="doll in dolllist" :class="{activedoll:doll.status ==1}" @click="goOrder(doll)">
+          <img :src="doll.picture" alt="">
+          <h3>{{doll.name}}</h3>
+          <p>{{doll.created_at}}</p>
+          <div class="tip">
+            <p>{{doll.status ==1 ? '已兑换' : '未兑换'}}</p>
+          </div>
+        </li>
+      </ul>
+      <button v-if="(dolllist.length - already) >= 2" class="btn" :style="styleBtn" @click="sendDoll">邮寄娃娃</button>
+      <button @click="goDollRoom" class="btn btn2" :style="styleBtn"  v-else>2个以上娃娃才可以邮寄哦~</button>
+    </div>
+    <div class="nothing" v-else>
+      <img src="./../assets/images/image_nothing.png" alt="">
+      <p>暂时还没有抓中哦~</p>
+      <button @click="goDollRoom">不信邪，现在就去抓一个!</button>
+    </div>
   </div>
 </template>
 
 <script>
-  import {getDollList} from './../util/ajax'
+  import {getDollList,getAddressDefault} from './../util/ajax'
+  import CONFIG from './../config/index'
+
   export default {
       data(){
         return {
           htmlShow:false,
           dolllist:[],
           dolls:[],
-          already:0
+          already:0,
+          entryMy:false,
+          styleUl:'',
+          styleBtn:'',
+          hasDefault:false
         }
       },
       created(){
-        this.Indicator.open();
+        if(!CONFIG.token){
+          this.htmlShow = true;
+        }
+        if(this.$route.query.entryMy){
+          this.entryMy = true;
+        }
+        if(CONFIG.token){
+          this.callAppFunction('getBottombarHeight','',function (res) {
+            if(Number(res)>0){
+              var distance = Number(res)/100;
+              this.styleUl = 'padding:0.36rem 0.36rem '+(distance+1.8)+'rem 0.36rem';
+              this.styleBtn = 'bottom:'+(0.34+distance)+'rem';
+            }
+          }.bind(this));
+        }
       },
       mounted(){
         getDollList().then((data) => {
-          this.dolllist = data.response.list;
-          for(var index in this.dolllist){
-            if(this.dolllist[index].status){
-              this.already++;
+          try {
+            this.dolllist = data.response.list;
+            for(var index in this.dolllist){
+              if(this.dolllist[index].status){
+                this.already++;
+              }
             }
+          }catch (err){}
+            this.htmlShow = true;
+            this.callAppFunction('showContent')
+          });
+        getAddressDefault().then((data)=>{
+          if (data.response.length != 0) {
+            this.hasDefault = true;
           }
-          this.Indicator.close();
-          this.htmlShow = true;
-        }).catch((err) => {
         })
       },
       methods:{
         sendDoll(){
-          this.$router.push('ableexchangedolls');
+          if(this.entryMy){
+            if(this.hasDefault){
+              this.$router.push('exchangedolls');
+            }else {
+              this.$router.push({path:'addressedit',query:{local:'dolllist'}});
+            }
+          }else {
+            if(this.hasDefault){
+              this.callAppFunction('openNewBrowser',{url:CONFIG.pageUrl+'/catchapp/#/exchangedolls'})
+            }else {
+              this.callAppFunction('openNewBrowser',{url:CONFIG.pageUrl+'/catchapp/#/addressedit?local=dolllist'})
+            }
+          }
+        },
+        goOrder(doll){
+          if(doll.status == 1){
+            if(this.entryMy){
+              this.$router.push({path:"order",query:{dollID:doll.id}});
+            }else {
+              this.callAppFunction('openNewBrowser',{url:CONFIG.pageUrl+'/catchapp/#/order?dollID='+doll.id});
+            }
+          }
+        },
+        goDollRoom(){
+          this.callAppFunction('changeToHomeTab');
         }
       }
-
   }
 </script>
 
@@ -69,73 +111,34 @@
   .dolllist{
     width: 100%;
     height: 100%;
-    padding:0.1px 0.32rem 0 0.32rem;
-    overflow: auto;
+    /*padding: 0 0.36rem;*/
+    /*background: #fff2f2;*/
   }
-    .header{
-      width: 100%;
-      background: #fff;
-      position: fixed;
-      left: 0;
-      top:0;
-      z-index: 666;
-      padding: 0 0.32rem;
-    }
-  .dolllist h3{
-    font-size: 0.64rem;
-    font-weight: 600;
-    line-height: 0.64rem;
-    margin: 0.52rem 0 0.88rem 0;
-  }
-  .dolllist h3 span{
-    font-size: 0.52rem;
-    color:#fc8a15;
-    float: right;
-    font-weight: normal;
-  }
-  .dolllist .datalist{
+  .dolllist>div{
     width: 100%;
-    height: 1.3rem;
-    margin: 0 0 0.97rem 0;
-  }
-  .dolllist .datalist li{
-    width: 33.33%;
     height: 100%;
-    float: left;
-    color: #666666;
-    text-align: center;
-    border-right: 1px solid #c1c1c1;
-  }
-  .dolllist .datalist li:last-child{
-    border-right: none;
-  }
-  .dolllist .datalist li h4{
-    width: 100%;
-    height: 0.82rem;
-    line-height: 0.82rem;
-    font-size: 0.52rem;
-    font-weight: 600;
+    /*overflow: auto;*/
   }
 
-  .dolllist .datalist li p{
-    height: 0.48rem;
-    line-height: 0.48rem;
-    font-size: 0.44rem;
-    font-family: S-Regular;
-  }
   .dolllist .main{
     width: 100%;
-    /*height: calc(100% - 4.49rem);*/
-    margin:4.31rem 0 0 0;
+    height: 100%;
+    background: #fff2f2;
+    padding: 0.36rem 0.36rem 1.8rem 0.36rem;
+    /*margin: 0.36rem 0 1.8rem 0;*/
+    overflow: auto;
+    /*overflow: hidden;*/
   }
+
+
   .dolllist .main li{
     width: calc((100% - 0.32rem)/2);
-    border: 1px solid #fc8a15;
     border-radius: 0.1rem;
     float: left;
-    margin: 0 0.32rem 0.32rem 0;
+    margin: 0 0.32rem 0.36rem 0;
     position: relative;
     overflow: hidden;
+    background: #fff;
   }
   .dolllist .main li:nth-child(2n){
     margin: 0 0 0.32rem 0;
@@ -146,19 +149,24 @@
     height: 3.65rem;
     vertical-align: top;
   }
+  .dolllist .main li>h3{
+    font-size: 0.44rem;
+    color: #494949;
+    font-weight: 600;
+    line-height: 0.9rem;
+    text-indent: 0.24rem;
+  }
   .dolllist .main li>p{
     font-size: 0.36rem;
-    height: 0.73rem;
-    color: #494949;
-    background:#f8ede1;
-    font-weight: 600;
-    line-height: 0.73rem;
-    text-indent: 0.23rem;
+    color: #707070;
+    line-height: 0.36rem;
+    text-indent: 0.24rem;
+    margin: 0 0 0.38rem 0;
   }
   .dolllist .main li .tip{
     width: 2.1rem;
     height: 2.1rem;
-    background: #fc8a15;
+    background: #ff78cd;
     position: absolute;
     top:-1.05rem;
     left: -1.05rem;
@@ -174,12 +182,63 @@
     position: absolute;
     bottom: 0;
   }
-  .dolllist .main li.activedoll{
-    border:1px solid #c1c1c1;
-  }
   .dolllist .main li.activedoll .tip{
     background: #cacaca;
   }
 
+  .btn{
+    width: 8.16rem;
+    height: 1.38rem;
+    outline: none;
+    border: none;
+    border-radius: 0.18rem;
+    background: #f972c7;
+    color: #fff;
+    font-size: 0.52rem;
+    display: block;
+    position: fixed;
+    left: 50%;
+    bottom:0.34rem;
+    transform: translateX(-50%);
+  }
+
+  .btn2{
+    background: #afafaf;
+    font-size: 0.48rem;
+  }
+
+  .nothing{
+    width: 100%;
+    height: 100%;
+    position: relative;
+    top:0;
+    left: 0;
+    padding: 0.1px;
+  }
+  .nothing>img{
+    width: 4.7rem;
+    display: block;
+    margin: 30% auto 0 auto;
+  }
+  .nothing>p{
+    font-size: 0.52rem;
+    color: #999;
+    text-align: center;
+    margin: 0.6rem 0 0 0;
+  }
+  .nothing>button{
+    width: 7.14rem;
+    height: 1.38rem;
+    font-size: 0.52rem;
+    color: #fff;
+    border-radius: 0.18rem;
+    background: #f972c7;
+    border: none;
+    outline: none;
+    position: absolute;
+    bottom:25%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
 
 </style>

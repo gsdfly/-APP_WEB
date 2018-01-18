@@ -12,9 +12,14 @@ function getPhoneType() {
 }
 
 let CONFIG = {
-  url: process.env.NODE_ENV == 'development' ? 'http://proxy.5zhua.cn/' :'http://yapi.5zhua.cn/mock/18',
-  token:'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vcHJveHkuNXpodWEuY24vYXBpL3VzZXJfbG9naW4iLCJpYXQiOjE1MTI1NTYwMzAsImV4cCI6MTUxNzczNDAzMCwibmJmIjoxNTEyNTU2MDMwLCJqdGkiOiJPUHFGWUFXRmQ2Rk96Qk5nIiwic3ViIjo0ODcsInBydiI6IjM3YjdjNTBiMjUwNDFhNGMyMGZlNDdjMjQyZTFiZmQwZjYzMDkyYzUifQ.TKdXLeRBnyCQwrORMyNYm8BH7Jaistp3IlAa42AV9dY',
-  PhoneType:getPhoneType()
+  pageUrl:document.URL.indexOf('catchme') != -1 ? 'http://www.catchme.com.cn/':'http://www.5zhua.cn/',
+  url: document.URL.indexOf('catchme') != -1 ?  'http://proxy.catchme.com.cn/' : 'http://proxy.5zhua.cn/',
+  // token:'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vcHJveHkuNXpodWEuY24vYXBpL3VzZXJfbG9naW4iLCJpYXQiOjE1MTI1NTYwMzAsImV4cCI6MTUxNzczNDAzMCwibmJmIjoxNTEyNTU2MDMwLCJqdGkiOiJPUHFGWUFXRmQ2Rk96Qk5nIiwic3ViIjo0ODcsInBydiI6IjM3YjdjNTBiMjUwNDFhNGMyMGZlNDdjMjQyZTFiZmQwZjYzMDkyYzUifQ.TKdXLeRBnyCQwrORMyNYm8BH7Jaistp3IlAa42AV9dY',
+  // token:'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vcHJveHkuNXpodWEuY24iLCJpYXQiOjE1MTU2NjExMjksImV4cCI6MTUyMDgzOTEyOSwibmJmIjoxNTE1NjYxMTI5LCJqdGkiOiJmdTh4YTcwaTFUWFdKblczIiwic3ViIjo1MjksInBydiI6IjM3YjdjNTBiMjUwNDFhNGMyMGZlNDdjMjQyZTFiZmQwZjYzMDkyYzUifQ.MeJIAl0c2mBkJAYRkTB9IKgjTAd046R5jKiLIwsMGMQ',
+  token:'',
+  PhoneType:getPhoneType(),
+  // appKey:'kyx+kydm6A1nXQCnfi+PWusy/8We5HYh5QFlqVIUVfk='
+  appKey:''
 }
 
 

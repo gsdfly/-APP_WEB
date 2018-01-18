@@ -1,29 +1,34 @@
 <template>
-  <div class="orders" v-show="htmlShow">
-    <div class="header">
-      <h3>订单列表</h3>
-    </div>
-    <ul class="orderUl">
-      <li v-for="item in orderList">
-        <h5>{{item.ex_no}}<span>{{item.status}}</span></h5>
-       <div class="imgs">
-         <div class="img" v-for="doll in item.doll_snapshot">
-           <img :src="doll.picture" alt="">
-         </div>
-       </div>
-        <div class="addressInfo">
-          <h4><span>{{item.address_snapshot.name}}</span><i>{{item.address_snapshot.phone}}</i></h4>
-          <dl class="address">
-            <dt><i class="iconfont icon-icon-yxj-address"></i></dt>
-            <dd>{{''+''+item.address_snapshot.province+item.address_snapshot.city+item.address_snapshot.area+item.address_snapshot.address}}</dd>
-          </dl>
-        </div>
-        <div class="expressInfo" v-show="item.status != '待配送'">
-          <p>{{item.express_company}}</p>
-          <p>订单号：<span>{{item.express_no}}</span></p>
-        </div>
-      </li>
-    </ul>
+  <div class="orders">
+    <!--<div class="header">-->
+      <!--<h3>订单列表</h3>-->
+    <!--</div>-->
+    <!--<ul class="orderUl">-->
+      <!--<li v-for="item in orderList">-->
+        <!--<h5>{{item.ex_no}}<span>{{item.status}}</span></h5>-->
+       <!--<div class="imgs">-->
+         <!--<div class="img" v-for="doll in item.doll_snapshot">-->
+           <!--<img :src="doll.picture" alt="">-->
+         <!--</div>-->
+       <!--</div>-->
+        <!--<div class="addressInfo">-->
+          <!--<h4><span>{{item.address_snapshot.name}}</span><i>{{item.address_snapshot.phone}}</i></h4>-->
+          <!--<dl class="address">-->
+            <!--<dt><i class="iconfont icon-icon-yxj-address"></i></dt>-->
+            <!--<dd>{{''+''+item.address_snapshot.province+item.address_snapshot.city+item.address_snapshot.area+item.address_snapshot.address}}</dd>-->
+          <!--</dl>-->
+        <!--</div>-->
+        <!--<div class="expressInfo" v-show="item.status != '待配送'">-->
+          <!--<p>{{item.express_company}}</p>-->
+          <!--<p>订单号：<span>{{item.express_no}}</span></p>-->
+        <!--</div>-->
+      <!--</li>-->
+    <!--</ul>-->
+    <p @click="test1">GO游戏记录</p>
+    <p @click="test2">GO确认订单</p>
+    <p @click="test3">GO订单</p>
+    <p @click="test4">GO问题</p>
+    <p @click="test">测试重新打开新的web</p>
   </div>
 </template>
 
@@ -49,7 +54,25 @@
       })
     },
     methods:{
-
+      test1(){
+        this.$router.push('gamehistory')
+      },
+      test2(){
+        this.$router.push('exchangedolls')
+      },
+      test3(){
+        this.$router.push({path:'order',query:{dollID:59}})
+      },
+      test4(){
+        this.$router.push('questions')
+      },
+      test(){
+        try{
+          DianaJSInterface.openNewBrowser({url:'http://www.baidu.com'});
+        }catch (err){
+          this.callAppFunction('openNewBrowser',{url:'http://www.baidu.com'});
+        }
+      },
     }
   }
 </script>

@@ -3,43 +3,91 @@ import Router from 'vue-router'
 
 Vue.use(Router);
 
-export default new Router({
+var router =  new Router({
   // mode: 'history',
   routes: [
     {
       path: '/addresslist',
-      name:'addresslist',
-      component: r => require.ensure([], () => r(require('@/components/addresslist')))
+      component: r => require.ensure([], () => r(require('@/components/addresslist'))),
+      meta:{
+        title:'我的地址'
+      }
     },
     {
       path: '/addressedit',
-      name:'addressedit',
-      component: r => require.ensure([], () => r(require('@/components/addressedit')))
+      component: r => require.ensure([], () => r(require('@/components/addressedit'))),
+      meta:{
+        title:'新增地址'
+      },
+      beforeEnter: (to, from, next) => {
+        if(to.query.name){
+          document.title = '修改地址'
+        }
+        next();
+      }
     },
     {
       path: '/dolllist',
-      name:'dolllist',
-      component: r => require.ensure([], () => r(require('@/components/dolllist')))
+      component: r => require.ensure([], () => r(require('@/components/dolllist'))),
+      meta:{
+        title:'我的娃娃'
+      }
     },
     {
       path: '/exchangedolls',
-      name:'exchangedolls',
-      component: r => require.ensure([], () => r(require('@/components/exchangedolls')))
+      component: r => require.ensure([], () => r(require('@/components/exchangedolls'))),
+      meta:{
+        title:'确认订单'
+      }
     },
     {
       path: '/orders',
-      name:'orders',
       component: r => require.ensure([], () => r(require('@/components/orders')))
     },
     {
       path: '/ableexchangedolls',
-      name:'ableexchangedolls',
       component: r => require.ensure([], () => r(require('@/components/ableexchangedolls')))
     },
     {
       path: '/addresslistmanage',
-      name:'addresslistmanage',
-      component: r => require.ensure([], () => r(require('@/components/addresslistmanage')))
+      component: r => require.ensure([], () => r(require('@/components/addresslistmanage'))),
+      meta:{
+        title:'我的地址'
+      },
+      beforeEnter: (to, from, next) => {
+        if(to.query.form){
+          document.title = '其他地址'
+        }
+        next();
+      }
+    },
+    {
+      path: '/order',
+      component: r => require.ensure([], () => r(require('@/components/order'))),
+      meta:{
+        title:'我的订单'
+      }
+    },
+    {
+      path: '/gamehistory',
+      component: r => require.ensure([], () => r(require('@/components/gamehistory'))),
+      meta:{
+        title:'游戏记录'
+      }
+    },
+    {
+      path: '/questions',
+      component: r => require.ensure([], () => r(require('@/components/questions'))),
+      meta:{
+        title:'常见问题'
+      }
+    },
+    {
+      path:'/legacy',
+      component: r => require.ensure([], () => r(require('@/components/legacy'))),
+      meta:{
+        title:'用户协议与隐私条款'
+      }
     },
     {
       path:'/',
@@ -47,3 +95,10 @@ export default new Router({
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  document.title = to.meta.title;
+  next()
+})
+
+export default router
