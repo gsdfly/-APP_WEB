@@ -2,6 +2,7 @@
   <div class="dolllist" v-show="htmlShow">
     <div v-if="this.dolllist.length > 0">
       <ul class="main"  :style="styleUl">
+        <li style="width: 100%"><img src="./../assets/images/notice.png" alt="" style="width: 100%;"></li>
         <li v-for="doll in dolllist" :class="{activedoll:doll.status ==1}" @click="goOrder(doll)">
           <img :src="doll.picture" alt="">
           <h3>{{doll.name}}</h3>
@@ -70,7 +71,7 @@
             this.callAppFunction('showContent')
           });
         getAddressDefault().then((data)=>{
-          if (data.response.length != 0) {
+          if (data.response.length !== 0) {
             this.hasDefault = true;
           }
         })
@@ -123,6 +124,7 @@
   .dolllist .main{
     width: 100%;
     height: 100%;
+    /*height: calc(100% - 3.35rem);*/
     background: #fff2f2;
     padding: 0.36rem 0.36rem 1.8rem 0.36rem;
     /*margin: 0.36rem 0 1.8rem 0;*/
@@ -140,7 +142,7 @@
     overflow: hidden;
     background: #fff;
   }
-  .dolllist .main li:nth-child(2n){
+  .dolllist .main li:nth-child(2n+1){
     margin: 0 0 0.32rem 0;
   }
   .dolllist .main li img{
@@ -155,6 +157,9 @@
     font-weight: 600;
     line-height: 0.9rem;
     text-indent: 0.24rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
   .dolllist .main li>p{
     font-size: 0.36rem;

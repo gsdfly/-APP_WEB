@@ -123,6 +123,10 @@
        }
   .gamehistory ul li .dollInfo h3{
     line-height: 1.3rem;
+    max-width: 5rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
   .gamehistory ul li .dollInfo p{
     font-size: 0.36rem;

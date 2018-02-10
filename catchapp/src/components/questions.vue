@@ -9,14 +9,12 @@
           <h3>{{item.title}}</h3>
           <i class="iconfont" :class="current == index ? 'icon-fa-angle-up' : 'icon-fa-angle-down'" ></i>
         </div>
-        <transition name="fade">
         <div class="questionInfo" v-show="current == index">
             <div>
               <p v-html="item.content"></p>
               <img v-for="imgUrl in item.imgs" :src="imgUrl" alt="">
             </div>
           </div>
-        </transition>
       </li>
     </ul>
   </div>
@@ -48,13 +46,6 @@
 </script>
 
 <style scoped>
-
-  /*.fade-enter-active, .fade-leave-active {*/
-    /*transition: all .5s;*/
-  /*}*/
-  /*.fade-enter, .fade-leave-to {*/
-    /*opacity: 0;*/
-  /*}*/
   .questions{
     width: 100%;
     height: 100%;

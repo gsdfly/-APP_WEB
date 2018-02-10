@@ -211,18 +211,13 @@
   .dolls li p {
     line-height: 2.06rem;
     float: left;
+    max-width: calc(100% - 2.3em);
     text-indent: 0.7rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
-  /*.footer{*/
-  /*width: 100%;*/
-  /*height: 1.8rem;*/
-  /*!*height: 9.4%;*!*/
-  /*background: #fff2f2;*/
-  /*position: fixed;*/
-  /*left: 0;*/
-  /*bottom: 0;*/
-  /*}*/
   .btn {
     position: fixed;
     left: 50%;

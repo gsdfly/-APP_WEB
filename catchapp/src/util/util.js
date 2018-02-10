@@ -14,8 +14,13 @@ function setupWebViewJavascriptBridge(callback) {
 
 export const callAppFunction = (func,args,callback) => {
   args = args || {};
+  var argsString;
   //判断手机系统
-  var argsString = JSON.stringify(args);
+  if(typeof args === 'object'){
+    argsString= JSON.stringify(args);
+  }else {
+    argsString = args;
+  }
   if(CONFIG.PhoneType == 'isAndroid'){
     var result;
     if(argsString == '{}'){

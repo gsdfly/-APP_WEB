@@ -2,7 +2,7 @@
   <div class="order" v-if="htmlShow">
     <div class="orderInfo">
       <div class="imgs">
-        <img v-for="(doll,index) in orderInfo.doll_snapshot" :src="doll.picture" alt="">
+        <img v-for="(doll,index) in orderInfo.doll_snapshot.slice(0,2)" :src="doll.picture" alt="">
       </div>
       <dl>
         <dt>当前状态</dt>
@@ -79,21 +79,25 @@
 
   .order .orderInfo .imgs {
     width: 100%;
-    height: 2.1rem;
+    /*height: 2.1rem;*/
     overflow: auto;
-    margin: 0 0 0.42rem 0;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
+    margin: 0 0 0.12rem 0;
+    /*display: flex;*/
+    /*justify-content: space-between;*/
+    /*flex-wrap: wrap;*/
   }
 
   .order .orderInfo .imgs img {
     width: 2.1rem;
-    height: 100%;
+    /*height: 100%;*/
     float: left;
     border-radius: 0.18rem;
-    background: red;
-    /*margin-right:calc((100% - 8.4rem)/3)rem;*/
+    /*margin: 0 0.3rem 0.3rem 0;*/
+    margin-right:calc((100% - 8.4rem)/3);
+    margin-bottom:calc((100% - 8.4rem)/3);
+  }
+  .order .orderInfo .imgs img:nth-of-type(4n) {
+    margin: 0;
   }
 
   .order dl {
