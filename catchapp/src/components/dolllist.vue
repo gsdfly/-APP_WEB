@@ -2,7 +2,7 @@
   <div class="dolllist" v-show="htmlShow">
     <div v-if="this.dolllist.length > 0">
       <ul class="main"  :style="styleUl">
-        <li style="width: 100%"><img src="./../assets/images/notice.png" alt="" style="width: 100%;"></li>
+        <!--<li style="width: 100%"><img src="./../assets/images/notice.png" alt="" style="width: 100%;"></li>-->
         <li v-for="doll in dolllist" :class="{activedoll:doll.status ==1}" @click="goOrder(doll)">
           <img :src="doll.picture" alt="">
           <h3>{{doll.name}}</h3>
@@ -142,7 +142,7 @@
     overflow: hidden;
     background: #fff;
   }
-  .dolllist .main li:nth-child(2n+1){
+  .dolllist .main li:nth-child(2n){
     margin: 0 0 0.32rem 0;
   }
   .dolllist .main li img{
